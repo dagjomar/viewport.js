@@ -1,9 +1,11 @@
 //Custom Viewport object that handles the view window of the app - or any app for that matter
 //Purpose: To abstract away some of the functionality of the window object. Has a more optimized event handler for the window.resize
+/**
+ * @Requires: utils/event.js
+              [jquery]
+**/
 
-var ivectoAppMVC = ivectoAppMVC || {};
-extend(ivectoAppMVC, "Viewport");
-ivectoAppMVC.Viewport = function( jqEl, options ) { 
+var MobileViewport = function( jqEl, options ) { 
 
     var _hideAddressBar = (options && options.hideBar) || false; //If we want to enable the functionality for hiding the AdressBar on iPhone, etc. Default: false
     

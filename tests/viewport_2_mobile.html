@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+"http://www.w3.org/TR/html4/loose.dtd"> 
+<html> 
+    <head> 
+    <title>Unit Test - Viewport mobile</title> 
+        <link rel="shortcut icon" href="favicon.ico">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta charset="UTF-8"> <!-- syntax starting from html5 -->
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+        <link rel="stylesheet" href="../css/mobile-viewport.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="qunit/qunit.css" type="text/css" media="screen" />
+        <script type="text/javascript" src="qunit/qunit.js"></script>
+
+    <script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
+        
+</head> 
+<body onload="onReadyFunc()"> 
+
+    <div id="mobile-viewport" style="position:absolute; margin:0px; padding:0px; background-color: #ffcc00; -webkit-box-shadow: inset 0px 0px 3px 2px rgba(4, 34, 244, 1); box-shadow: inset 0px 0px 3px 2px rgba(4, 34, 244, 1);">     
+        <div style="position:absolute; absolute; top: 0px; width:100%; height: 20px; background-color: orange;">top</div>
+        <div style="position:absolute; absolute; bottom: 0px; width:100%; height: 20px; background-color: aqua;">bottom</div>
+        <div style="position:absolute; absolute; left: 0px; height:100%; width: 20px; background-color: green;">l</div>
+        <div style="position:absolute; absolute; right: 0px; height:100%; width: 20px; background-color: red;">r</div>
+        <div style="position: absolute; margin-left:25px; margin-right: 25px; margin-top:25px;">
+            clientHeight: <span id="clientHeight"></span>
+            <br />
+            window.innerHeight: <span id="windowInnerHeight"></span>
+            <br />
+            window.height(): <span id="windowHeight"></span>
+            <br />
+            window.innerHeight(): <span id="window-innerHeight"></span>
+            <br />
+            scrollTop: <span id="scrollTop"></span>
+            <br />
+            body Height: <span id="bodyHeight"></span>
+            <br />
+            screen Height: <span id="screenHeight"></span>
+            <br />
+            orientationChange: <span id="orientationChange"></span>
+        </div>
+        
+    </div>
+        
+        <script type="text/javascript" src="../js/utils/event.js"></script>
+        <script type="text/javascript" src="qunit/qcallbacks.js"></script>
+        <script type="text/javascript" src="../js/mobile-viewport.js"></script>
+        
+        <script type="text/javascript">
+        
+        var myView;
+        var oChange = 0;
+        
+        function onReadyFunc() {             
+            myView = new MobileViewport("#mobile-viewport", {hideBar : true});
+            myView.updateChangeEvent.attach(function(caller, args) { 
+                   $("#clientHeight").text( document.documentElement.clientHeight);
+                   $("#windowInnerHeight").text( window.innerHeight );
+                   $("#windowHeight").text( $(window).height() );
+                   $("#window-innerHeight").text( $(window).innerHeight() );
+                   $("#scrollTop").text( $( window ).scrollTop() );
+                   $("#bodyHeight").text( $( 'body' ).height() );
+                   $("#screenHeight").text( screen.height );
+                   $("#orientationChange").text( oChange );
+            });
+            myView.orientationChangeEvent.attach(function(caller, args) { 
+                oChange++;
+                   $("#orientationChange").text( oChange );
+            });
+
+             myView.hideAddressBar(true);
+        };
+        </script>            
+        
+</body>
+
+</html>

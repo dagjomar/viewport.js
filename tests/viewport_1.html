@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+"http://www.w3.org/TR/html4/loose.dtd"> 
+<html> 
+    <head> 
+    <title>Unit Test - Viewport</title> 
+        <link rel="shortcut icon" href="favicon.ico">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, width=device-width, user-scalable=no">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta charset="UTF-8"> <!-- syntax starting from html5 -->
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="default">
+        
+        <link rel="stylesheet" href="../css/mobile-viewport.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="qunit/qunit.css" type="text/css" media="screen" />
+        <script type="text/javascript" src="qunit/qunit.js"></script>
+                
+    <script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
+</head> 
+<body> 
+    
+    <div data-role="page">
+   
+        <div data-role="content">
+            <div id="qUnit-viewport" style="position: absolute; left: 50%; z-index:9999;">
+                <div id="qUNITDIV" style="width:100%; height: auto; border:1px solid #ffcc00; z-index:9999; background-color:#cccccc;">
+                    <h1 id="qunit-header">CG qUnit testing</h1>
+                    <h2 id="qunit-banner"></h2>
+                    <div id="qunit-testrunner-toolbar"></div>
+                    <h2 id="qunit-userAgent"></h2>
+                    <ol id="qunit-tests"></ol>
+                    <div id="qunit-fixture">test markup, will be hidden</div>
+                </div>
+            </div>
+            
+            <div id="mobile-viewport" style="position: absolute; left: 100px; top:100px; outline: 1px solid black;">
+                <div style="position:absolute; top: 0px; left:0px; background-color: #00ffcc; width:100%; height:40px;">test div</div>
+            </div>
+        
+        </div>
+
+    </div>    
+        
+        <script type="text/javascript" src="../js/utils/event.js"></script>
+        <script type="text/javascript" src="qunit/qcallbacks.js"></script>
+        <script type="text/javascript" src="../js/mobile-viewport.js"></script>
+        
+        <script type="text/javascript">
+        
+        var qViewport = new MobileViewport("#qUnit-viewport", {width:'50%', height:320});
+            
+        $(function() {
+            test("Trying to create a viewport with no given parameters", function() {
+                var myView = new MobileViewport();
+                equal(myView.divElement, undefined, "Viewport _jqEl element should be undefined");
+                myView.destroy();
+                delete myView;
+            });
+            
+            test("Trying to create a viewport with one given element", function() {
+                var myView = new MobileViewport("#mobile-viewport");
+                equal(myView.divElement, '#mobile-viewport', "Viewport element should be be '#mobile-viewport'");
+                myView.destroy();
+                delete myView;
+            });
+            
+            test("Trying to create a viewport with given width, and setting it back to 100% and 50%", function() {
+                var myView = new MobileViewport("#mobile-viewport", {width: 100});
+                equal(myView.width(), 100, "Viewport width() should now return 100");
+                equal( $(myView.divElement).width(), 100, "Using jquery .width() should also return 100" );
+                equal( myView.width(200), 200, "Setting width to 200 should return 200" );
+                equal( myView.width('100%'), $("#mobile-viewport").width(), "Setting width 100% should return actual width" );
+                equal( myView.width('50%'), $("#mobile-viewport").width(), "Setting width 50% should return actual width" );
+                myView.destroy();
+                delete myView;
+            });
+            test("Trying to create a viewport with given height, and setting it back to 100% and 50%", function() {
+                var myView = new MobileViewport("#mobile-viewport", {height: 100});
+                equal(myView.height(), 100, "Viewport height() should now return 100");
+                equal( $(myView.divElement).height(), 100, "Using jquery .height() should also return 100" );
+                equal( myView.height(200), 200, "Setting height to 200 should return 200" );
+                equal( myView.height('100%'), $("#mobile-viewport").height(), "Setting height 100% should return actual height" );
+                equal( myView.height('50%'), $("#mobile-viewport").height(), "Setting height 50% should return actual height" );
+                myView.destroy();
+                delete myView;
+            });
+            
+            test("Trying to create a viewport with given width AND height", function() {
+                var myView = new MobileViewport("#mobile-viewport", {width: 100, height: 100});
+                equal(myView.height(), 100, "Viewport height() should now return 100");
+                equal( $(myView.divElement).height(), 100, "Using jquery .height() should also return 100" );
+                equal( $(myView.divElement).width(), 100, "Using jquery .width() should also return 100" );
+                myView.destroy();
+                delete myView;
+            });
+            
+            test("Testing updateChangeEvent event", function() {
+                var myView = new MobileViewport("#mobile-viewport", {width: 100, height: 100});
+                myView.updateChangeEvent.attach(function(caller, args) { qCallbacks.push('updateChangeEvent', args); });
+                equal(qCallbacks.count('updateChangeEvent'), 0, "updateChangeEvent should have been fired 0 times by now");
+                myView.width(150);
+                equal(qCallbacks.count('updateChangeEvent'), 1, "updateChangeEvent should have been fired 1 time by now");
+                myView.destroy();
+                delete myView;
+            });
+            
+
+        });
+                    
+                    
+        </script>            
+        
+    
+</body>
+
+</html>

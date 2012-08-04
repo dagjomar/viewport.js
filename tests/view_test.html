@@ -42,9 +42,8 @@
         
     </div>
         
-        <script type="text/javascript" src="../js/utils/event.js"></script>
         <script type="text/javascript" src="qunit/qcallbacks.js"></script>
-        <script type="text/javascript" src="../js/mobile-viewport.js"></script>
+        <script type="text/javascript" src="../js/jquery.mobile-viewport.js"></script>
         
         <script type="text/javascript">
         
@@ -52,8 +51,8 @@
         var oChange = 0;
         
         function onReadyFunc() {             
-            myView = new MobileViewport("#mobile-viewport", {hideBar : true});
-            myView.updateChangeEvent.attach(function(caller, args) { 
+            myView = $("#mobile-viewport").MobileViewport({hideBar : true});
+            myView.on('updateChangeEvent', function(args) { 
                    $("#clientHeight").text( document.documentElement.clientHeight);
                    $("#windowInnerHeight").text( window.innerHeight );
                    $("#windowHeight").text( $(window).height() );
@@ -63,12 +62,11 @@
                    $("#screenHeight").text( screen.height );
                    $("#orientationChange").text( oChange );
             });
-            myView.orientationChangeEvent.attach(function(caller, args) { 
+            
+            myView.on('orientationChangeEvent', function(args) { 
                 oChange++;
                    $("#orientationChange").text( oChange );
             });
-
-             myView.hideAddressBar(true);
         };
         </script>            
         
